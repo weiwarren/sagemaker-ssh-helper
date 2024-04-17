@@ -31,5 +31,9 @@ RUN \
 RUN sm-ssh-ide configure --ssh-only
 
 USER $MAMBA_USER
+
+# Install copilot extension
+RUN sagemaker-code-editor --install-extension $SAGEMAKER_SSH_HELPER_DIR/src/extensions/GitHub.copilot-1.180.821.vsix --extensions-dir /opt/amazon/sagemaker/sagemaker-code-editor-server-data/extensions
+
 WORKDIR "/home/${NB_USER}"
 ENTRYPOINT ["entrypoint-code-editor"]  
