@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="accountSettings">
-    <option name="activeProfile" value="profile:ssh" />
+    <option name="activeProfile" value="profile:default" />
     <option name="activeRegion" value="eu-west-1" />
     <option name="recentlyUsedProfiles">
       <list>
+        <option value="profile:default" />
         <option value="profile:ssh" />
       </list>
     </option>
@@ -14,9 +15,6 @@
       </list>
     </option>
   </component>
-  <component name="connectionManager">
-    <option name="activeConnectionId" value="sso;us-east-1;https://view.awsapps.com/start" />
-  </component>
   <component name="connectionPinningManager">
     <option name="pinnedConnections">
       <map>
@@ -24,5 +22,8 @@
         <entry key="aws.codewhisperer" value="sso;us-east-1;https://view.awsapps.com/start" />
       </map>
     </option>
+  </component>
+  <component name="explorerToolWindow">
+    <option name="selectedTab" value="Explorer" />
   </component>
 </project>

@@ -1,3 +1,11 @@
+"""
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: MIT-0
+"""
+
+import os
+from pathlib import Path
+
 import setuptools
 
 required_packages = [
@@ -20,13 +28,14 @@ extras = {
         "pytest-cov",
         "pytest-html",
         "pytest-profiling",
+        "pytest-monitor",
         "bandit",
         "aws-cdk-lib==2.64.0",
         "constructs>=10.0.0,<11.0.0",
         "sagemaker-studio-image-build",
         "sagemaker-training",
         "selenium",
-        "accelerate[sagemaker]",
+        "accelerate[sagemaker]<0.29",  # TODO: see https://github.com/huggingface/accelerate/issues/2744
     ],
     "dev": [
         "sagemaker-pytorch-training",
@@ -50,9 +59,15 @@ extras = {
         "numpy==1.22.4"
     ]
 }
+
+
+def read_version():
+    return open(os.path.join(os.path.dirname(__file__), "sagemaker_ssh_helper", "VERSION")).read()
+
+
 setuptools.setup(
     name='sagemaker-ssh-helper',
-    version='2.1.1.dev0',
+    version=read_version(),
     author="Amazon Web Services",
     description="A helper library to connect into Amazon SageMaker with AWS Systems Manager and SSH (Secure Shell)",
     long_description="SageMaker SSH Helper is a library that allows you to \"SSH into SageMaker\", "
@@ -60,11 +75,17 @@ setuptools.setup(
                      "and realtime inference endpoints as well as SageMaker Studio notebook containers "
                      "for fast interactive experimentation, remote debugging, and advanced troubleshooting."
                      "\n\n"
-                     "For the documentation, see the repo [https://github.com/aws-samples/sagemaker-ssh-helper/]"
-                     "(https://github.com/aws-samples/sagemaker-ssh-helper/).",
+                     f"For the documentation, see the repo "
+                     f"[https://github.com/aws-samples/sagemaker-ssh-helper/tree/v{read_version()}]"
+                     f"(https://github.com/aws-samples/sagemaker-ssh-helper/tree/v{read_version()}).",
     long_description_content_type='text/markdown',
     url='https://github.com/aws-samples/sagemaker-ssh-helper',
     packages=setuptools.find_packages(),
+    data_files=[
+        ('notebooks', [str(Path('SageMaker_SSH_IDE.ipynb')), str(Path('SageMaker_SSH_Notebook.ipynb'))]),
+        ('js', [str(Path('./sagemaker_ssh_helper/js/drop_studio_file.js'))]),
+        ('version', [str(Path('sagemaker_ssh_helper/VERSION'))])
+    ],
     include_package_data=True,
     scripts=['sagemaker_ssh_helper/sm-helper-functions',
              'sagemaker_ssh_helper/sm-connect-ssh-proxy',
@@ -82,7 +103,13 @@ setuptools.setup(
              'sagemaker_ssh_helper/sm-init-ssm',
              'sagemaker_ssh_helper/sm-setup-ssh',
              ],
-    python_requires=">=3.7",
+    entry_points={
+        "console_scripts": [
+            "sm-ssh=sagemaker_ssh_helper.sm_ssh:main",
+            "sm-ssh-deregister-instances=sagemaker_ssh_helper.deregister_old_instances_from_ssm:main"
+        ]
+    },
+    python_requires=">=3.8",
     install_requires=required_packages,
     extras_require=extras,
     classifiers=[
@@ -92,11 +119,11 @@ setuptools.setup(
         "License :: OSI Approved :: MIT No Attribution License (MIT-0)",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
+        # "Programming Language :: Python :: 3.12",  # TODO: SageMaker Python SDK doesn't support it yet
+        # "Programming Language :: Python :: 3.13",  # TODO: not tested, test with tox
     ]
 )

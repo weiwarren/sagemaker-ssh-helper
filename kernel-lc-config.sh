@@ -12,7 +12,7 @@ JB_LICENSE_SERVER_HOST="jetbrains-license-server.example.com"
 # OR keep it as is and populate ~/.vnc/passwd inside SageMaker Studio to override (see https://linux.die.net/man/1/vncpasswd ).
 VNC_PASSWORD="123456"
 
-# Replace with a local UserId
+# Replace with a local UserId that is returned by `aws sts get-caller-identity` command
 # OR keep it as is and put the value into ~/.sm-ssh-owner inside SageMaker Studio to override
 LOCAL_USER_ID="AIDACKCEVSQ6C2EXAMPLE:terry@SSO"
 
@@ -53,7 +53,6 @@ sm-ssh-ide set-local-user-id "$LOCAL_USER_ID"
 
 sm-ssh-ide init-ssm
 
-sm-ssh-ide stop
-sm-ssh-ide start
+nohup sm-ssh-ide start &
 
 nohup sm-ssh-ide ssm-agent &

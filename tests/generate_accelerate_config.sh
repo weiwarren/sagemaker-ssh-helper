@@ -1,6 +1,14 @@
 #!/bin/bash
 
-mkdir -p /root/.cache/huggingface/accelerate/
+echo Creating default HF Accelerate config
+
+accelerate config default
+
+echo The config:
+
+cat /root/.cache/huggingface/accelerate/default_config.yaml
+
+echo Rewriting the config:
 
 cat > /root/.cache/huggingface/accelerate/default_config.yaml <<EOF
 base_job_name: accelerate-sagemaker-1
@@ -18,3 +26,7 @@ region: eu-west-1
 transformers_version: 4.17.0
 use_cpu: false
 EOF
+
+cat /root/.cache/huggingface/accelerate/default_config.yaml
+
+echo Done configuring HF Accelerate
